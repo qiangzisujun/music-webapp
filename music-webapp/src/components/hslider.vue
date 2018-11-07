@@ -71,6 +71,7 @@
     @include flex(row);
     padding-top: 40px;
     justify-content:space-around;
+    height: 140px;
     a{
       text-decoration: none;
     }

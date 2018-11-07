@@ -61,7 +61,16 @@
     @include panel;
     .list{
       @include flex(row);
-
+      font-size: 22px;
+      .item{
+        width: 200px;
+        margin-left: 10px;
+        img{
+          width: 200px;
+          height: 200px;
+          border-radius: 5%;
+        }
+      }
     }
   }
 </style>
