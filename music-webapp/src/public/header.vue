@@ -1,12 +1,12 @@
 <template lang="html">
     <div :class="$style.header">
-      <div :class="$style.left">
+      <span :class="$style.left">
         <router-link :to="{name:'menu'}"><img src="../assets/iconfont/menu.png"/></router-link>
-      </div>
-      <div :class="$style.content">music-player</div>
-      <div :class="$style.right">
+      </span>
+       music-player
+      <span :class="$style.right">
         <router-link :to="{name:'search'}"><img src="../assets/iconfont/search.png"/></router-link>
-      </div>
+      </span>
     </div>
 </template>
 
@@ -32,23 +32,35 @@
     font-size: 32px;
     z-index: 100;
     background-color: #FF0000;
-    img{
-      width: 48px;
-      height: 48px;
-      margin: 11px 0 0 18px;
-      display: inline-block;
-    }
+    text-align: center;
+    font-weight: 800;
     .left{
       float: left;
+      line-height: 70px;
+      width: 48px;
+      height: 48px;
+      margin: 17px 0 0 18px;
+      box-sizing: border-box;
+      display: inline-block;
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
     .content{
       float: left;
-      margin-left: 152px;
-      font-weight: 800;
+
     }
     .right{
+      width: 48px;
+      height: 48px;
       float: right;
-      margin-right: 18px;
+      margin: 17px 18px 0 0;
+      img{
+        width: 100%;
+        height: 100%;
+
+      }
     }
   }
 </style>

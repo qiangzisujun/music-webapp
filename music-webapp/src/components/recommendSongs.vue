@@ -23,32 +23,32 @@
             href:"歌单列表1",
             img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
             title:"孤独",
-            content:"'长大，这两个字，孤独得连偏旁都没有'"
+            content:"最是粤语最为情深 也唯独你最难忘怀"
           },{
             href:"歌单列表2",
             img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
             title:"孤独",
-            content:"'长大，这两个字，孤独得连偏旁都没有'"
+            content:"最是粤语最为情深 也唯独你最难忘怀"
           },{
             href:"歌单列表3",
             img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
             title:"孤独",
-            content:"'长大，这两个字，孤独得连偏旁都没有'"
+            content:"最是粤语最为情深 也唯独你最难忘怀"
           },{
             href:"歌单列表4",
             img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
             title:"孤独",
-            content:"'长大，这两个字，孤独得连偏旁都没有'"
+            content:"最是粤语最为情深 也唯独你最难忘怀"
           },{
             href:"歌单列表5",
             img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
             title:"孤独",
-            content:"'长大，这两个字，孤独得连偏旁都没有'"
+            content:"最是粤语最为情深 也唯独你最难忘怀"
           },{
             href:"歌单列表6",
             img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
             title:"孤独",
-            content:"'长大，这两个字，孤独得连偏旁都没有'"
+            content:"最是粤语最为情深 也唯独你最难忘怀"
           }]
         }
       }
@@ -61,12 +61,15 @@
     @include panel;
     .list{
       @include flex(row);
-      font-size: 22px;
+      font-size: 20px;
+      text-decoration: none;
+      line-height: 30px;
+      font-family: "Helvetica Neue", Helvetica;
       .item{
-        width: 200px;
-        margin-left: 10px;
+        width: 30.3333333333%;
+        margin-left: 2%;
         img{
-          width: 200px;
+          width: 100%;
           height: 200px;
           border-radius: 5%;
         }

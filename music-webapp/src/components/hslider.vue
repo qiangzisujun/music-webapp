@@ -57,14 +57,17 @@
 <style lang="scss" module>
   @import "../assets/css/element.scss";
   .slider{
-    margin-top: 150px;
     text-align: center;
     background-color: #FF0000;
-    height: 259px;
+    width: 95%;
+    margin: 150px 15px 0 27px;
+    border-radius: 5%;
+    justify-content:space-around;
     img{
-      width: 95%;
-      display: inline-block;
+      width: 100%;
+      height: 100%;
       border-radius: 5%;
+      margin-bottom: -10px;
     }
   }
   .list{
