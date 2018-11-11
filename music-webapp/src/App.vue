@@ -4,6 +4,7 @@
     <Navbar/>
     <Hslider/>
     <RecommendSongs/>
+    <SongList/>
   </div>
 </template>
 
@@ -12,6 +13,7 @@
   import Navbar from "./public/navbar";
   import Hslider from "./components/hslider";
   import RecommendSongs from "./components/recommendSongs";
+  import SongList from "./components/songList";
   export default {
     name: 'App',
     components:{
@@ -19,6 +21,7 @@
       Hslider,
       Navbar,
       Herdor,
+      SongList,
     }
   }
 </script>

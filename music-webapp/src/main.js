@@ -3,8 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios';
+import global from './assets/js/global.js';
 
 Vue.config.productionTip = false
+Vue.prototype.$http=axios
+Vue.prototype.global=global
 
 /* eslint-disable no-new */
 new Vue({

@@ -20,18 +20,17 @@
         Slider,
       },
       data(){
+        this.$http.get(this.global.rootPath+'/banner').then(res=>{
+          for(var i=0;i<res.data.banners.length;i++){
+            var arr={};
+            arr.href=res.data.banners[i].url;
+            arr.src=res.data.banners[i].imageUrl;
+            this.items.push(arr);
+            if (i===3)break;
+          }
+        })
         return{
-          items:[{
-            href:"home1",
-            src:"//img12.360buyimg.com/jrpmobile/jfs/t25759/60/2272607322/48838/438e6aad/5bc6f6a5Ncd00b8cb.jpg?width=750&height=320",
-          },{
-            href:"home2",
-            src:"//img12.360buyimg.com/jrpmobile/jfs/t1/4666/5/13746/82184/5bd98633E1d2a7f34/2fd9caf35f9e5a8a.jpg?width=750&height=320",
-          },{
-            href:"home3",
-            src:"//img12.360buyimg.com/jrpmobile/jfs/t1/8154/20/4177/48862/5bd98534E5d9de022/b6dd43ca38fcc9ee.jpg?width=750&height=320",
-          }],
-
+          items:[],
           enters:[{
             href:'download',
             img:require("../assets/iconfont/privte.png"),
@@ -57,17 +56,10 @@
 <style lang="scss" module>
   @import "../assets/css/element.scss";
   .slider{
-    text-align: center;
     background-color: #FF0000;
-    width: 95%;
-    margin: 150px 15px 0 27px;
-    border-radius: 5%;
-    justify-content:space-around;
+    margin-top: 190px;
     img{
       width: 100%;
-      height: 100%;
-      border-radius: 5%;
-      margin-bottom: -10px;
     }
   }
   .list{
@@ -75,6 +67,7 @@
     padding-top: 40px;
     justify-content:space-around;
     height: 140px;
+    padding-bottom: 40px;
     a{
       text-decoration: none;
     }
@@ -86,11 +79,12 @@
       margin-bottom: 40px;
       img{
         display: inline-block;
-        width: 90px;
-        height: 90px;
+        width: 120px;
+        height: 120px;
       }
       h4{
-        font-size: 26px;
+        font-size: 32px;
+        font-weight: 500;
         margin-top: 12px;
         color: #666;
       }

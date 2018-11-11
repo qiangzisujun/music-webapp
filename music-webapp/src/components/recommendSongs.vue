@@ -2,9 +2,9 @@
     <Panel title="推荐歌单" :class="$style.panel">
       <section :class="$style.list">
           <div :class="$style.item" v-for="item in items" :key="item.id">
-            <router-link :to="{name:item.href}">
-              <img :src="item.img" :alt="item.title">
-              <p>{{item.content}}</p>
+            <router-link :to="{name:item.picUrl}">
+              <img :src="item.picUrl" :alt="item.copywriter">
+              <p>{{item.name}}</p>
             </router-link>
           </div>
       </section>
@@ -18,60 +18,60 @@
         Panel
       },
       data(){
+        this.$http.get(this.global.rootPath+'/personalized').then(res=>{
+          console.log(res.data.result[0].picUrl);
+          this.items=res.data.result;
+        })
         return{
-          items:[{
-            href:"歌单列表1",
-            img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
-            title:"孤独",
-            content:"最是粤语最为情深 也唯独你最难忘怀"
-          },{
-            href:"歌单列表2",
-            img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
-            title:"孤独",
-            content:"最是粤语最为情深 也唯独你最难忘怀"
-          },{
-            href:"歌单列表3",
-            img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
-            title:"孤独",
-            content:"最是粤语最为情深 也唯独你最难忘怀"
-          },{
-            href:"歌单列表4",
-            img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
-            title:"孤独",
-            content:"最是粤语最为情深 也唯独你最难忘怀"
-          },{
-            href:"歌单列表5",
-            img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
-            title:"孤独",
-            content:"最是粤语最为情深 也唯独你最难忘怀"
-          },{
-            href:"歌单列表6",
-            img:require("../assets/img/6dc96dd718c4c7c35b54c8f8762b071d.jpg"),
-            title:"孤独",
-            content:"最是粤语最为情深 也唯独你最难忘怀"
-          }]
+          items:[]
         }
       }
     }
+    /*
+    id: 2409342460,
+    type: 0,
+    name: "【VIP专享】一周新歌推荐",
+    copywriter: "编辑推荐：每周VIP专享新歌，编辑精选推荐！",
+    picUrl: "http://p2.music.126.net/a8FJkDCP_VPoZsMbb6ATvw==/109951163655847926.jpg",
+    canDislike: false,
+    playCount: 24701432,
+    trackCount: 20,
+    highQuality: false,
+    alg: "featured"
+    */
 </script>
 
 <style lang="scss" module>
   @import "../assets/css/element.scss";
   .panel{
     @include panel;
+    h4{
+      font-size: 42px;
+      font-weight: 500;
+      margin-left: 20px;
+    }
     .list{
       @include flex(row);
-      font-size: 20px;
       text-decoration: none;
-      line-height: 30px;
-      font-family: "Helvetica Neue", Helvetica;
+      box-sizing: border-box;
+
+      justify-content:space-around;
       .item{
-        width: 30.3333333333%;
-        margin-left: 2%;
+        width: 31.333333%;
+        margin-bottom: 30px;
         img{
-          width: 100%;
-          height: 200px;
-          border-radius: 5%;
+          display: block;
+          max-width: 100%;
+          height: auto;
+          border-radius: 3%;
+        }
+        p{
+          color: #2E3030;
+          font-size: 32px;
+          margin-top: 5px;
+          margin-left: 8px;
+          line-height:normal;
+          padding:10px 0;
         }
       }
     }

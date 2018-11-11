@@ -40,7 +40,7 @@
     position: fixed;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 120px;
     top: 70px;
     background-color: #FF0000;
     margin: 0px;
@@ -51,8 +51,7 @@
       @include flex(row);
       justify-content: space-around;
       text-align: center;
-      line-height: 80px;
-      padding-top: 5px;
+      line-height: 120px;
       li{
         text-align: center;
         a{
@@ -66,7 +65,7 @@
         }
         p{
           color: #fff !important;
-          font-size: 28px;
+          font-size: 42px;
           font-weight:500;
         }
       }
