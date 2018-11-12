@@ -34,6 +34,37 @@
   export default {
     name: "player",
     data(){
+      const id=parseInt(this.$route.params.id,10);
+      var poster=this.$route.params.poster;//海报，封面
+      var name=this.$route.params.name;//歌曲名称
+      var duration=this.$route.params.duration;//时常
+      var artist=this.$route.params.artist;//艺术家，歌手
+      console.log(this.$route.params.id);
+      this.$http.get(this.global.rootPath+"/song/url?id="+id).then(res=>{
+        var data={}
+        data.id=id;
+        data.poster=poster;
+        data.name=name;
+        data.duration=duration;
+        data.artist=artist;
+        data.src=res.data;
+        this.item = { current: 0, playing: false, random: false }
+        Object.assign(this.item,data);
+        App.audio.src=this.item.src;
+        App.audio.autoplay=true;
+        App.audio.addEventListener('loadedmetadata', () => {
+          this.item.duration = App.audio.duration
+        })
+        App.audio.addEventListener('timeupdate', () => {
+          this.item.current = App.audio.currentTime
+        })
+        App.audio.addEventListener('play', () => {
+          this.item.playing = true
+        })
+        App.audio.addEventListener('pause', () => {
+          this.item.playing = false
+        })
+      })
       return {
         item:{}
       }
@@ -45,7 +76,8 @@
         var name=transition.to.params.name;//歌曲名称
         var duration=transition.to.params.duration;//时常
         var artist=transition.to.params.artist;//艺术家，歌手
-        this.$http.get(this.global.rootPath+"/song/url?id=").then(res=>{
+        console.log(this.$route.params.id);
+        this.$http.get(this.global.rootPath+"/song/url?id="+id).then(res=>{
           var data={}
           data.id=id;
           data.poster=poster;
@@ -57,7 +89,7 @@
           Object.assign(this.item,data);
           App.audio.src=this.item.src;
           App.audio.autoplay=true;
-          pp.audio.addEventListener('loadedmetadata', () => {
+          App.audio.addEventListener('loadedmetadata', () => {
             this.item.duration = App.audio.duration
           })
           App.audio.addEventListener('timeupdate', () => {

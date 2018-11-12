@@ -2,7 +2,7 @@
   <Panel title="推荐歌曲" :class="$style.panel">
     <section :class="$style.list">
       <div :class="$style.item" v-for="item in items" :key="item.id">
-        <router-link :to="{name:'player'}">
+        <router-link :to="{name:'player',params:{id:item.id}}">
           <img :src="item.picUrl" :alt="item.title">
           <p>{{item.title}}</p>
           <p>{{item.songer_name}}</p>
