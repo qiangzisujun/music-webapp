@@ -2,7 +2,7 @@
   <Panel title="推荐歌曲" :class="$style.panel">
     <section :class="$style.list">
       <div :class="$style.item" v-for="item in items" :key="item.id">
-        <router-link :to="{name:item.picUrl}">
+        <router-link :to="{name:'player'}">
           <img :src="item.picUrl" :alt="item.title">
           <p>{{item.title}}</p>
           <p>{{item.songer_name}}</p>
@@ -20,13 +20,19 @@
     },
     data(){
       this.$http.get(this.global.rootPath+'/personalized/newsong').then(res=>{
-
         for(var i=0;i<res.data.result.length;i++){
           var arr={};
+          var music={};
           arr.id=res.data.result[i].song.id;
           arr.title=res.data.result[i].song.name;
           arr.songer_name=res.data.result[i].song.artists[0].name;
           arr.picUrl=res.data.result[i].song.album.picUrl;
+          music.id=res.data.result[i].song.id;;
+          music.poster=res.data.result[i].song.album.picUrl;
+          music.name=res.data.result[i].song.name;
+          music.duration=res.data.result[i].song.duration;
+          music.artist=res.data.result[i].song.artists[0].name;;
+          arr.music=music;
           this.items.push(arr);
           if (i===8)break;
         }
