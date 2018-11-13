@@ -12,7 +12,7 @@ export default new Router({
       name: 'home',
       component: Home
     }, {
-      path: '/player',
+      path: '/player/:data',
       name: 'player',
       component: Player
     }

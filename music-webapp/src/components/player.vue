@@ -1,24 +1,39 @@
 <template>
   <div :class="$style.player">
-    <div :class="$style.disc">
-      <img :src="item.poster" :alt="item.name" :style="{transform:'rotate(' + (item.current/item.duration*360*2) + 'deg)'}">
-<!--      <span :class="$style.duration">{{convert(item.duration-item.current)}}</span>-->
-    </div>
-    <h2 :class="$style.title">{{item.name}}</h2>
-    <h3 :class="$style.artist">{{item.artist}}</h3>
-    <div :class="$style.lyric">
+    <section :class="$style.poster">
+      <p :class="$style.title">{{item.name}}</p>
+      <p :class="$style.artist">{{item.artist}}</p>
+      <div :class="$style.disc">
+        <img :src="item.poster" :alt="item.name" :style="{transform:'rotate(' + (item.current/item.duration*360*2) + 'deg)'}">
+      </div>
+    </section>
+    <section :class="$style.lyric">
       <p :class="$style.previous">人如天上的明月是不可拥有</p>
       <p :class="$style.current">情如曲过只遗留无可挽救再分别</p>
       <p :class="$style.next">为何只是失望填密我的空虚</p>
-    </div>
-    <input type="range" value="0" min="0" :max="item.duration" v-model="item.current" @change="progress()">
-    <!--<div :class="$style.controls">
-      <button><i :class=""></i></button>
-      <button :class="$style.active" @click="prev()"><i :class="fa fa-backward"></i></button>
-      <button :class="$style.active" @click="play()"><i :class="fa" :class="{'fa-play':!item.playing, 'fa-pause':item.playing}"></i></button>
-      <button :class="$style.active" @click="next()"><i :class="fa fa-forward"></i></button>
-      <button :class="$style.active"><i></i></button>
-    </div>-->
+    </section>
+    <section :class="$style.range">
+      <span :class="$style.currentDate">0.00<!--{{convert(item.duration-item.current)}}--></span>
+      <input type="range" value="0" min="0" :max="item.duration" v-model="item.current" @change="progress()">
+      <span :class="$style.maxDate">{{item.duration}}</span>
+    </section>
+    <section :class="$style.controls">
+      <div :class="$style.icon">
+        <img src="../assets/iconfont/circulation.png"/>
+      </div>
+      <div :class="$style.icon" @click="prev()">
+        <img src="../assets/iconfont/prev.png"/>
+      </div>
+      <div :class="$style.icon" @click="play()">
+        <img src="../assets/iconfont/player.png"/>
+      </div>
+      <div :class="$style.icon" @click="next()">
+        <img src="../assets/iconfont/next.png"/>
+      </div>
+      <div :class="$style.icon">
+        <img src="../assets/iconfont/list.png"/>
+      </div>
+    </section>
   </div>
 </template>
 <script>
@@ -34,12 +49,11 @@
   export default {
     name: "player",
     data(){
-      const id=parseInt(this.$route.params.id,10);
-      var poster=this.$route.params.poster;//海报，封面
-      var name=this.$route.params.name;//歌曲名称
-      var duration=this.$route.params.duration;//时常
-      var artist=this.$route.params.artist;//艺术家，歌手
-      console.log(this.$route.params.id);
+      const id=parseInt(this.$route.params.data.id,10);
+      var poster=this.$route.params.data.poster;//海报，封面
+      var name=this.$route.params.data.name;//歌曲名称
+      var duration=this.$route.params.data.duration;//时常
+      var artist=this.$route.params.data.artist;//艺术家，歌手
       this.$http.get(this.global.rootPath+"/song/url?id="+id).then(res=>{
         var data={}
         data.id=id;
@@ -47,7 +61,7 @@
         data.name=name;
         data.duration=duration;
         data.artist=artist;
-        data.src=res.data;
+        data.src=res.data.data[0].url;
         this.item = { current: 0, playing: false, random: false }
         Object.assign(this.item,data);
         App.audio.src=this.item.src;
@@ -69,42 +83,7 @@
         item:{}
       }
     },
-    route:{
-      data(transition){
-        const id=parseInt(transition.to.params.id,10);
-        var poster=transition.to.params.poster;//海报，封面
-        var name=transition.to.params.name;//歌曲名称
-        var duration=transition.to.params.duration;//时常
-        var artist=transition.to.params.artist;//艺术家，歌手
-        console.log(this.$route.params.id);
-        this.$http.get(this.global.rootPath+"/song/url?id="+id).then(res=>{
-          var data={}
-          data.id=id;
-          data.poster=poster;
-          data.name=name;
-          data.duration=duration;
-          data.artist=artist;
-          data.src=res.data.url;
-          this.item = { current: 0, playing: false, random: false }
-          Object.assign(this.item,data);
-          App.audio.src=this.item.src;
-          App.audio.autoplay=true;
-          App.audio.addEventListener('loadedmetadata', () => {
-            this.item.duration = App.audio.duration
-          })
-          App.audio.addEventListener('timeupdate', () => {
-            this.item.current = App.audio.currentTime
-          })
-          App.audio.addEventListener('play', () => {
-            this.item.playing = true
-          })
-          App.audio.addEventListener('pause', () => {
-            this.item.playing = false
-          }).catch(error => router.go({ name: 'list' }))
-        })
-        return { item: {} }
-      },
-      methods: {
+    methods: {
         convert: convertDuration,
         play() {
           if (this.item.playing) {
@@ -138,12 +117,83 @@
           })
         }
       },
-    }
   }
 </script>
 
 <style lang="scss" module>
   @import "../assets/css/element";
+  .poster{
+    margin-top: 20px;
+    .disc{
+      margin: 50px 0 50px 0;
+    }
+    .title{
+      text-align: center;
+      overflow: hidden;
+      color: #fd9500;
+      margin-top: 10px;
+    }
+    .artist {
+      margin-top: 30px;
+      text-align: center;
+      font-size:80%;
+    }
+  }
+  .lyric{
+    text-align: center;
+    margin-top: 20px;
+    p{
+      font-size: 42px;
+      font-weight: 500;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #fd9500;
+      margin: 0 0 .5rem;
+    }
+  }
+  .range{
+    position: fixed;
+    bottom: 220px;
+    left: 0;
+    right: 0;
+    span{
+      width: 15%;
+    }
+    input{
+      width: 70%;
+    }
+  }
+  .controls{
+    background: #F04752;
+    height: 200px;
+    line-height: 200px;
+    position: fixed;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    @include list(row);
+    justify-content:space-around;
+    .icon{
+      text-align: center;
+      line-height: 200px;
+      img{
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        padding: 50px 0 50px 0;
+      }
+      &:nth-child(3){
+        img{
+          display: inline-block;
+          width: 150px;
+          height: 150px;
+          padding: 25px 0 25px 0;
+        }
+      }
+    }
+  }
   .player {
     display: flex;
     flex: 1;
@@ -159,66 +209,15 @@
   }
 
   .player .disc img {
-    width: 10rem;
+    width: 12rem;
     border-radius: 50%;
     border: .0625rem solid #fd9500;
     padding: .3rem;
     transition: transform .5s linear;
   }
-
-  .player .disc .duration {
-    font-size: 1.5rem;
-    color: rgba(253, 149, 0, 1);
-    margin-top: -1.5em;
-    z-index: 1;
-  }
-
-  .player .title {
-    font-size: 1.6rem;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #fd9500;
-    margin: 0 0 .5rem;
-  }
-
-  .player .artist {
-    font-size: 1rem;
-    text-align: center;
-    margin: 0;
-  }
-
-  .player .lyric {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-
-  .player .lyric .previous,
-  .player .lyric .next {
-    color: rgba(255, 255, 255, .3);
-  }
-
-  .player .lyric .current {
-    font-size: 1.1rem;
-  }
-
-  .player .controls {
-    display: flex;
-    justify-content: space-around;
-    background-color: rgba(10, 10, 10, .2);
-    padding: 1rem;
-    font-size: 2rem;
-  }
-
-  .player .controls button {
-    border: 0;
-    background-color: transparent;
-    color: #fff;
-    width: 2.8125rem;
-  }
-
   .player .controls button.active {
     color: #fd9500;
   }
+
+
 </style>
