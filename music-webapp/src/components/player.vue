@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.player">
+  <div :class="$style.player" @touchstart="firstPlay">
     <section :class="$style.poster">
       <p :class="$style.title">{{item.name}}</p>
       <p :class="$style.artist">{{item.artist}}</p>
@@ -34,12 +34,10 @@
         <img src="../assets/iconfont/list.png"/>
       </div>
     </section>
+    <audio ref="audio"></audio>
   </div>
 </template>
 <script>
-  import Vue from 'vue'
-  const App = Vue.extend({})
-  App.audio = new Audio()
   const convertDuration = duration => {
     const h = Math.floor(duration / 3600)
     const m = Math.floor(duration % 3600 / 60)
@@ -64,26 +62,38 @@
         data.src=res.data.data[0].url;
         this.item = { current: 0, playing: false, random: false }
         Object.assign(this.item,data);
-        App.audio.src=this.item.src;
-        App.audio.autoplay=true;
-        App.audio.addEventListener('loadedmetadata', () => {
-          this.item.duration = App.audio.duration
+
+        this.$refs.audio.addEventListener('loadedmetadata', () => {
+          this.item.duration = this.$refs.audio.duration
         })
-        App.audio.addEventListener('timeupdate', () => {
-          this.item.current = App.audio.currentTime
+        this.$refs.audio.addEventListener('timeupdate', () => {
+          this.item.current = this.$refs.audio.currentTime
         })
-        App.audio.addEventListener('play', () => {
+        this.$refs.audio.addEventListener('play', () => {
           this.item.playing = true
         })
-        App.audio.addEventListener('pause', () => {
+        this.$refs.audio.addEventListener('pause', () => {
           this.item.playing = false
         })
       })
       return {
-        item:{}
+        item:{},
+        url:''
+      }
+    },
+    watch:{
+      url(newUrl) {
+        this.$refs.audio.src = newUrl
+        this.$refs.audio.play()
       }
     },
     methods: {
+      firstPlay () {
+        this.$refs.audio.play()
+      },
+      changeUrl(url) {
+        this.url = url;
+      },
         convert: convertDuration,
         play() {
           if (this.item.playing) {
@@ -94,7 +104,7 @@
           this.item.playing = !this.item.playing
         },
         progress() {
-          App.audio.currentTime = this.item.current
+          this.$refs.audio.currentTime = this.item.current
         },
         next() {
           this.$http.jsonp(`${serverUrl}/music`).then(res => {
