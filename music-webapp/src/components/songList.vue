@@ -27,11 +27,13 @@
           arr.title=res.data.result[i].song.name;
           arr.songer_name=res.data.result[i].song.artists[0].name;
           arr.picUrl=res.data.result[i].song.album.picUrl;
+          arr.bgUrl=res.data.result[i].song.artists[0].picUrl;
           music.id=res.data.result[i].song.id;;
           music.poster=res.data.result[i].song.album.picUrl;
           music.name=res.data.result[i].song.name;
           music.duration=res.data.result[i].song.duration;
-          music.artist=res.data.result[i].song.artists[0].name;;
+          music.artist=res.data.result[i].song.artists[0].name;
+          music.bgUrl=res.data.result[i].song.artists[0].picUrl;
           arr.music=music;
           this.items.push(arr);
           if (i===8)break;

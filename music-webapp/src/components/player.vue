@@ -1,49 +1,49 @@
 <template>
-  <div :class="$style.player" @touchstart="firstPlay">
-    <section :class="$style.poster">
+  <div :class="$style.player" @touchstart.once="firstPlay">
+    <div :class="$style.background">
+      <div :class="$style.filter"></div>
+      <img :src="item.poster" width="100%" height="100%">
+    </div>
+    <div :class="$style.poster">
       <p :class="$style.title">{{item.name}}</p>
       <p :class="$style.artist">{{item.artist}}</p>
-      <div :class="$style.disc">
-        <img :src="item.poster" :alt="item.name" :style="{transform:'rotate(' + (item.current/item.duration*360*2) + 'deg)'}">
-      </div>
-    </section>
-    <section :class="$style.lyric">
+    </div>
+    <div :class="$style.disc">
+      <img :src="item.poster" :alt="item.name" :style="{transform:'rotate(' + (item.current/item.duration*360*2) + 'deg)'}">
+    </div>
+    <div :class="$style.lyric">
       <p :class="$style.previous">人如天上的明月是不可拥有</p>
       <p :class="$style.current">情如曲过只遗留无可挽救再分别</p>
       <p :class="$style.next">为何只是失望填密我的空虚</p>
-    </section>
-    <section :class="$style.range">
-      <span :class="$style.currentDate">0.00<!--{{convert(item.duration-item.current)}}--></span>
-      <input type="range" value="0" min="0" :max="item.duration" v-model="item.current" @change="progress()">
-      <span :class="$style.maxDate">{{item.duration}}</span>
-    </section>
-    <section :class="$style.controls">
-      <div :class="$style.icon">
-        <img src="../assets/iconfont/circulation.png"/>
+    </div>
+    <div :class="$style.bottom">
+      <div :class="$style.range">
+        <span :class="$style.currentDate">{{convert(item.current)}}</span>
+        <input type="range" value="0" min="0" :max="item.duration" v-model="item.current" @change="progress()">
+        <span :class="$style.maxDate">{{convert(item.duration)}}</span>
       </div>
-      <div :class="$style.icon" @click="prev()">
-        <img src="../assets/iconfont/prev.png"/>
+      <div :class="$style.controls">
+        <div :class="$style.icon">
+          <img src="../assets/iconfont/circulation.png"/>
+        </div>
+        <div :class="$style.icon" @click="prev()">
+          <img src="../assets/iconfont/prev.png"/>
+        </div>
+        <div :class="$style.icon" @click="play()">
+          <img src="../assets/iconfont/player.png"/>
+        </div>
+        <div :class="$style.icon" @click="next()">
+          <img src="../assets/iconfont/next.png"/>
+        </div>
+        <div :class="$style.icon">
+          <img src="../assets/iconfont/list.png"/>
+        </div>
       </div>
-      <div :class="$style.icon" @click="play()">
-        <img src="../assets/iconfont/player.png"/>
-      </div>
-      <div :class="$style.icon" @click="next()">
-        <img src="../assets/iconfont/next.png"/>
-      </div>
-      <div :class="$style.icon">
-        <img src="../assets/iconfont/list.png"/>
-      </div>
-    </section>
-    <audio ref="audio"></audio>
+    </div>
+    <audio ref="audio" autoplay id="music-audio"></audio>
   </div>
 </template>
 <script>
-  const convertDuration = duration => {
-    const h = Math.floor(duration / 3600)
-    const m = Math.floor(duration % 3600 / 60)
-    const s = Math.floor(duration % 60)
-    return h ? `${pad(h, 2)}:${pad(m, 2)}:${pad(s, 2)}` : `${pad(m, 2)}:${pad(s, 2)}`
-  }
   export default {
     name: "player",
     data(){
@@ -52,6 +52,7 @@
       var name=this.$route.params.data.name;//歌曲名称
       var duration=this.$route.params.data.duration;//时常
       var artist=this.$route.params.data.artist;//艺术家，歌手
+      var bgUrl=this.$route.params.data.bgUrl;
       this.$http.get(this.global.rootPath+"/song/url?id="+id).then(res=>{
         var data={}
         data.id=id;
@@ -60,9 +61,10 @@
         data.duration=duration;
         data.artist=artist;
         data.src=res.data.data[0].url;
-        this.item = { current: 0, playing: false, random: false }
+        this.item = { current: 0, playing: false, random: false,bgUrl:"" }
         Object.assign(this.item,data);
-
+        this.$refs.audio.src=this.item.src;
+        this.item.bgUrl=bgUrl;
         this.$refs.audio.addEventListener('loadedmetadata', () => {
           this.item.duration = this.$refs.audio.duration
         })
@@ -85,7 +87,7 @@
       url(newUrl) {
         this.$refs.audio.src = newUrl
         this.$refs.audio.play()
-      }
+      },
     },
     methods: {
       firstPlay () {
@@ -94,7 +96,15 @@
       changeUrl(url) {
         this.url = url;
       },
-        convert: convertDuration,
+        convert(current){
+          current=current | 0
+          let minute=current/60|0
+          let second=current%60
+          if (second<10){
+            second='0'+second
+          }
+          return minute+':'+second
+        },
         play() {
           if (this.item.playing) {
             App.audio.pause()
@@ -131,10 +141,12 @@
 </script>
 
 <style lang="scss" module>
-  @import "../assets/css/element";
+  @import "../assets/css/element.scss";
   .poster{
     margin-top: 20px;
     .disc{
+      position: fixed;
+      top: 80px;
       margin: 50px 0 50px 0;
     }
     .title{
@@ -150,8 +162,11 @@
     }
   }
   .lyric{
+    position: fixed;
+    bottom: 320px;
+    width: 100%;
     text-align: center;
-    margin-top: 20px;
+    margin: 20px 0 20px 0;
     p{
       font-size: 42px;
       font-weight: 500;
@@ -168,15 +183,17 @@
     bottom: 220px;
     left: 0;
     right: 0;
+    margin: 0 15px 0px 15px;
     span{
+      font-size: 80%;
       width: 15%;
     }
     input{
-      width: 70%;
+      font-size: 80%;
+      width: 75%;
     }
   }
   .controls{
-    background: #F04752;
     height: 200px;
     line-height: 200px;
     position: fixed;
@@ -205,17 +222,38 @@
     }
   }
   .player {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 150;
+    background-color: #F2F3F4;
+    .background{
+      position: absolute;
+      left: -50%;
+      top: -50%;
+      width: 300%;
+      height: 300%;
+      z-index: -1;
+      opacity: 0.6;
+      filter: blur(90px);
+    }
+    .filter {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: black;
+      opacity: 0.6;
+    }
   }
-
   .player .disc {
     display: flex;
     flex: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 150px;
   }
 
   .player .disc img {
@@ -225,9 +263,7 @@
     padding: .3rem;
     transition: transform .5s linear;
   }
-  .player .controls button.active {
-    color: #fd9500;
-  }
+
 
 
 </style>
