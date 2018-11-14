@@ -1,4 +1,4 @@
-const rootPath = 'http://192.168.3.110:3000'
+const rootPath = 'http://192.168.43.92:3000'
 export default {
   rootPath
 }
