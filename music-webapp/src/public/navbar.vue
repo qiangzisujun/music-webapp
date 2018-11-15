@@ -2,12 +2,12 @@
     <Panel title="导航条" :class="$style.panel">
         <ul :class="$style.content">
           <li>
-            <router-link :to="{ name: 'rank'}">
+            <router-link :to="{ name: 'home'}">
               <p>推荐</p>
             </router-link>
           </li>
           <li>
-            <router-link :to="{ name: 'money'}">
+            <router-link :to="{ name: 'seniority'}">
               <p>排行</p>
             </router-link>
           </li>
