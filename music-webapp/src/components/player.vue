@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.player" @touchstart.once="firstPlay">
+  <div :class="$style.player" >
     <div :class="$style.background">
       <div :class="$style.filter"></div>
       <img :src="item.poster" width="100%" height="100%">
@@ -61,7 +61,7 @@
         data.duration=duration;
         data.artist=artist;
         data.src=res.data.data[0].url;
-        this.item = { current: 0, playing: false, random: false,bgUrl:"" }
+        this.item = { current: 0, playing: true, random: false,bgUrl:"" }
         Object.assign(this.item,data);
         this.$refs.audio.src=this.item.src;
         this.item.bgUrl=bgUrl;
@@ -96,22 +96,21 @@
       changeUrl(url) {
         this.url = url;
       },
-        convert(current){
-          current=current | 0
-          let minute=current/60|0
-          let second=current%60
-          if (second<10){
+      convert(current){
+        current=current | 0
+        let minute=current /60|0
+        let second=current %60
+        if (second<10){
             second='0'+second
-          }
-          return minute+':'+second
-        },
+        }
+        return minute+':'+second
+      },
         play() {
           if (this.item.playing) {
-            App.audio.pause()
+            this.$refs.audio.pause()
           } else {
-            App.audio.play()
+            this.$refs.audio.play();
           }
-          this.item.playing = !this.item.playing
         },
         progress() {
           this.$refs.audio.currentTime = this.item.current
