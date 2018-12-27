@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.box">
-      <div :class="$style.list">
+      <div :class="$style.list" ref="listView">
           <ul>
             <li v-for="group in singers" :class="$style.list-group" :key="group.id" ref="listGroup">
               <h2 :class="$style.list-group-title">{{group.title}}</h2>
@@ -12,9 +12,13 @@
               </ul>
             </li>
           </ul>
-          <div :class="list-shortcut">
+          <div :class="$style.list-shortcut">
             <ul>
-              <li v-for="(item ,index) in shortcutList" :class="$style.item" :data-index="index" :key="item.id">{{item}}</li>
+              <li v-for="(item ,index) in shortcutList"
+                  :class="{'current': currentIndex === index}" :data-index="index"
+                  :key="item.id"
+                  @touchstart="onShortcutStart"
+                  @touchmove.stop.prevent="onShortcutMove">{{item}}</li>
             </ul>
           </div>
       </div>
@@ -45,7 +49,7 @@ import BScroll from 'better-scroll'
           this._calculateHeight()
         }, 20)
       },
-      method:{
+      methods:{
         _initSrcoll(){
           this.scroll=new BScroll(this.$refs.listView,{
             probeType:3,
@@ -91,7 +95,7 @@ import BScroll from 'better-scroll'
                 id:item.id,
                 name:item.name,
                 avatar:item.img1v1Url,
-                aliaName:item.alias.json(' / ')
+                aliaName:item.alias.json('/')
               }))
             }
             const key=item.initial
@@ -193,6 +197,66 @@ import BScroll from 'better-scroll'
 
 </script>
 
-<style scoped>
-
+<style lang="scss" module>
+  @import "../assets/css/element.scss";
+  .box{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    .list{
+      position: relative;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: rgb(223, 223, 223);
+      .list-group{
+        padding-bottom: 30px;
+        .list-group-title{
+          height: 30px;
+          line-height: 30px;
+          padding-left: 20px;
+          font-size: 24px;
+          color: #fff;
+          background: #C20C0C;
+        }
+        .list-group-item{
+          display: flex;
+          align-items: center;
+          padding: 20px 0 0 30px;
+          .avatar{
+            width: 50px;
+            height: 50px;
+            border-radius: 5%;
+          }
+          .name{
+            margin-left: 20px;
+            color: black;
+            font-size: 28px;
+          }
+        }
+      }
+      .list-shortcut{
+        position: absolute;
+        z-index: 30;
+        right: 0;
+        top:50%;
+        transform: translateY(-50%);
+        width: 20px;
+        padding: 20px 0;
+        border-radius: 10px;
+        text-align: center;
+        background: rgba(167,167,167,0.5);
+        font-family: Helvetica;
+        .item{
+          padding: 3px;
+          line-height: 1;
+          color: black;
+          font-size: 11px;
+          &.current{
+            color: #C20C0C;
+          }
+        }
+      }
+    }
+  }
 </style>

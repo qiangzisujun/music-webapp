@@ -17,7 +17,7 @@
             </router-link>
           </li>
           <li>
-            <router-link :to="{ name: 'singer'}">
+            <router-link :to="{ name: 'singerList'}">
               <p>歌手</p>
             </router-link>
           </li>

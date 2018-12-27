@@ -4,6 +4,7 @@ import "../assets/css/reset.scss"
 import Player from '../components/player'
 import Home from '../components/home'
 import Seniority from '../components/seniority'
+import SingerList from '../components/singerList'
 
 Vue.use(Router)
 
@@ -21,6 +22,11 @@ export default new Router({
       path: '/seniority',
       name: 'seniority',
       component: Seniority
+    },
+    {
+      path: '/singerList',
+      name: 'singerList',
+      component: SingerList
     }
   ]
 })
