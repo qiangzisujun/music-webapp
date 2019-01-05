@@ -1,44 +1,52 @@
 <template>
+  <div>
+    <Herdor/>
+    <Navbar/>
     <div :class="$style.box">
       <div :class="$style.list" ref="listView">
-          <ul>
-            <li v-for="group in singers" :class="$style.list-group" :key="group.id" ref="listGroup">
-              <h2 :class="$style.list-group-title">{{group.title}}</h2>
-              <ul>
-                <li v-for="item in group.items" :class="$style.list-group-item" :key="item.id">
-                  <img v-lazy="item.avatar" :class="$style.avatar">
-                  <span :class="$style.name">{{item.name}}</span>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <div :class="$style.list-shortcut">
+        <ul>
+          <li v-for="group in singers" :class="$style.listGroup" :key="group.id" ref="listGroup">
+            <h2 :class="$style.listGroupTitle">{{group.title}}</h2>
             <ul>
-              <li v-for="(item ,index) in shortcutList"
-                  :class="{'current': currentIndex === index}" :data-index="index"
-                  :key="item.id"
-                  @touchstart="onShortcutStart"
-                  @touchmove.stop.prevent="onShortcutMove">{{item}}</li>
+              <li v-for="item in group.items" :class="$style.listGroupItem" :key="item.id">
+                <img :src="item.avatar" :class="$style.avatar">
+                <span :class="$style.name">{{item.name}}</span>
+              </li>
             </ul>
-          </div>
+          </li>
+        </ul>
+        <div :class="$style.listShortcut">
+          <ul>
+            <li v-for="(item ,index) in shortcutList"
+                :class="$style.itemBox" :data-index="index"
+                :key="item.id"
+                @touchstart="onShortcutStart"
+                @touchmove.stop.prevent="onShortcutMove">{{item}}</li>
+          </ul>
+        </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
 import Singer from '../common/js/singer'
 import BScroll from 'better-scroll'
+import Navbar from "../public/navbar";
+import Herdor from "../public/header";
 
   const pinyin = require('pinyin')
   const HOT_NAME = '热门'
   const HOT_SINGERS = 10
     export default {
-        name: "singerList",
+      name: "singerList",
+      components: {Herdor, Navbar},
       data () {
         return{
           singers:[],
           srcollY:-1,
-          currentIndex:0
+          currentIndex:0,
+          itemBox:"itemBox"
         }
       },
       created(){
@@ -95,7 +103,7 @@ import BScroll from 'better-scroll'
                 id:item.id,
                 name:item.name,
                 avatar:item.img1v1Url,
-                aliaName:item.alias.json('/')
+                aliaName:item.alias.join(' / ')
               }))
             }
             const key=item.initial
@@ -203,55 +211,56 @@ import BScroll from 'better-scroll'
     position: fixed;
     width: 100%;
     height: 100%;
+    margin-top: 190px;
     .list{
       position: relative;
       height: 100%;
       width: 100%;
-      overflow: hidden;
-      background: rgb(223, 223, 223);
-      .list-group{
-        padding-bottom: 30px;
-        .list-group-title{
-          height: 30px;
-          line-height: 30px;
-          padding-left: 20px;
-          font-size: 24px;
+      .listGroup{
+        padding-bottom: -100px;
+        .listGroupTitle{
+          height: 70px;
+          line-height: 70px;
+          padding-left: 50px;
+          font-size: 42px;
           color: #fff;
-          background: #C20C0C;
+          background:rgba(0, 0, 0, 0.1);
         }
-        .list-group-item{
+        .listGroupItem{
           display: flex;
           align-items: center;
-          padding: 20px 0 0 30px;
+          padding: 15px 0;
+          margin: 0 15px;
+          border-bottom: 1px solid rgb(228, 228, 228);
           .avatar{
-            width: 50px;
-            height: 50px;
-            border-radius: 5%;
+            width: 150px;
+            height: 150px;
+            border-radius: 15%;
           }
           .name{
-            margin-left: 20px;
-            color: black;
-            font-size: 28px;
+            margin-left: 60px;
+            color: #2E3030;
+            font-size: 42px;
           }
         }
       }
-      .list-shortcut{
+      .listShortcut{
         position: absolute;
         z-index: 30;
         right: 0;
-        top:50%;
+        top:45%;
         transform: translateY(-50%);
-        width: 20px;
-        padding: 20px 0;
-        border-radius: 10px;
+        width: 60px;
+        padding: 30px 0;
+        border-radius: 30px;
         text-align: center;
-        background: rgba(167,167,167,0.5);
         font-family: Helvetica;
-        .item{
-          padding: 3px;
+        .itemBox{
+          padding: 15px 15px;
           line-height: 1;
-          color: black;
-          font-size: 11px;
+          color: #757575;
+          font-size: 33px;
+          font-weight: bold;
           &.current{
             color: #C20C0C;
           }

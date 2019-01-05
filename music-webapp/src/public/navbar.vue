@@ -44,6 +44,7 @@
     top: 70px;
     background-color: #FF0000;
     margin: 0px;
+    z-index: 99;
     &>h4{
       display: none;
     }
