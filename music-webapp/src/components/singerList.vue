@@ -2,26 +2,23 @@
   <div>
     <Herdor/>
     <Navbar/>
-    <div :class="$style.box">
-      <div :class="$style.list" ref="listView">
+    <div class="box">
+      <div class="list" ref="listView">
         <ul>
-          <li v-for="group in singers" :class="$style.listGroup" :key="group.id" ref="listGroup">
-            <h2 :class="$style.listGroupTitle">{{group.title}}</h2>
+          <li v-for="group in singers" class="listGroup" :key="group.id" ref="listGroup">
+            <h2 class="listGroupTitle">{{group.title}}</h2>
             <ul>
-              <li v-for="item in group.items" :class="$style.listGroupItem" :key="item.id">
-                <img :src="item.avatar" :class="$style.avatar">
-                <span :class="$style.name">{{item.name}}</span>
+              <li v-for="item in group.items" class="listGroupItem" :key="item.id">
+                <img :src="item.avatar" class="avatar">
+                <span class="name">{{item.name}}</span>
               </li>
             </ul>
           </li>
         </ul>
-        <div :class="$style.listShortcut">
+        <div class="listShortcut" @touchstart="onShortcutStart" @touchmove.stop.prevent="onShortcutMove">
           <ul>
-            <li v-for="(item ,index) in shortcutList"
-                :class="$style.itemBox" :data-index="index"
-                :key="item.id"
-                @touchstart="onShortcutStart"
-                @touchmove.stop.prevent="onShortcutMove">{{item}}</li>
+            <li v-for="(item ,index) in shortcutList":data-index="index" class="itemBox"
+                :key="item.id" :class="{'current': currentIndex === index}">{{item}}</li>
           </ul>
         </div>
       </div>
@@ -74,7 +71,7 @@ import Herdor from "../public/header";
           this.listHeight.push(height)
           for (let i=0;i<list.length;i++){
             let item=list[i]
-            height +=clientHeight
+            height +=item.clientHeight
             this.listHeight.push(height)
           }
         },
@@ -204,8 +201,7 @@ import Herdor from "../public/header";
     }
 
 </script>
-
-<style lang="scss" module>
+<style lang="scss">
   @import "../assets/css/element.scss";
   .box{
     position: fixed;
